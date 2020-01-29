@@ -1,38 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
-import {
-  PRODUCT_DETAILS_PAGE_LOCATION,
-  PRODUCT_CARD_LOCATION,
-  PRODUCT_GRID_LOCATION,
-} from '../../constants';
-import styles from './styles';
+import { css } from 'glamor';
+import SoldOut from '../../icons/SoldOut';
+
+const styles = {
+  wrapper: css({
+    position: 'relative',
+  }),
+  image: css({
+    opacity: 0.5,
+  }),
+  badge: css({
+    width: '40%',
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    zIndex: 99,
+    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+};
 
 /**
- * @param {Array} badgeInfo Array of badge image urls
+ * @param {Object} badgeInfo badge images to display
  * @returns {JSX}
  */
-const CardBadge = ({ location, badgeInfo }) => {
-  const imageClass = classNames(
-    { [styles.cardImage]: location === PRODUCT_CARD_LOCATION },
-    { [styles.gridImage]: location === PRODUCT_GRID_LOCATION },
-    { [styles.pdpImage]: location === PRODUCT_DETAILS_PAGE_LOCATION }
-  );
-
-  const images = badgeInfo.map((image, index) => (
-    <img className={imageClass} src={image} alt="" key={index.toString()} />
-  ));
+function ComponentProductImage({ show, children }) {
+  if (!show) {
+    return children;
+  }
 
   return (
-    <div className={styles.container}>
-      {images}
+    <div className={styles.wrapper}>
+      <div className={styles.badge}>
+        <SoldOut />
+      </div>
+      <div className={styles.image}>
+        {children}
+      </div>
     </div>
   );
+}
+
+ComponentProductImage.propTypes = {
+  children: PropTypes.node.isRequired,
+  show: PropTypes.bool,
 };
 
-CardBadge.propTypes = {
-  badgeInfo: PropTypes.arrayOf(PropTypes.string).isRequired,
-  location: PropTypes.string.isRequired,
+ComponentProductImage.defaultProps = {
+  show: false,
 };
 
-export default CardBadge;
+export default ComponentProductImage;

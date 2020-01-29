@@ -1,18 +1,13 @@
 import { createSelector } from 'reselect';
-import { getProductDataById } from '@shopgate/engage/product';
-import { isTriggered } from '../helpers';
-import { badgeMap, badgeDisplayCount } from '../config';
+import { getProductStock } from '@shopgate/engage/product';
 
-export const getBadgeInfo = createSelector(
-  getProductDataById,
-  (productData) => {
-    const badgeInfo = badgeMap.filter(badge => isTriggered(productData, badge))
-      .map(filteredBadge => filteredBadge.src);
-
-    if (!badgeInfo) {
-      return null;
+export const showBadge = createSelector(
+  getProductStock,
+  (stock) => {
+    if (!stock) {
+      return false;
     }
 
-    return badgeInfo.slice(0, badgeDisplayCount);
+    return stock.ignoreQuantity === false && stock.quantity <= 0;
   }
 );

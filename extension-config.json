@@ -1,95 +1,37 @@
 {
-  "version": "1.1.0",
-  "id": "@shopgate-project/product-image-badges",
+  "version": "1.0.0",
+  "id": "@shopgate-project/out-of-stock-badges",
   "components": [
     {
-      "id": "ProductItemPriceBefore",
+      "id": "ComponentProductImage",
       "type": "portals",
-      "path": "frontend/portals/ProductItemPriceBefore",
-      "target": "product-item.price.before"
+      "path": "frontend/portals/ComponentProductImage",
+      "target": "component.product-image"
     },
     {
-      "id": "ComponentProductImageBefore",
+      "id": "ProductItemImage",
       "type": "portals",
-      "path": "frontend/portals/ComponentProductImageBefore",
-      "target": "component.product-image.before"
-    },
-    {
-      "id": "ProductItemImageBefore",
-      "type": "portals",
-      "path": "frontend/portals/ProductItemImageBefore",
-      "target": "product-item.image.before"
+      "path": "frontend/portals/ProductItemImage",
+      "target": "product-item.image"
     }
   ],
   "configuration": {
-    "badgeMap": {
+    "textColor": {
       "type": "admin",
-      "default": [
-        {
-          "triggerTags": [],
-          "triggerProps": [],
-          "src": ""
-        },
-        {
-          "triggerTags": [],
-          "triggerProps": [],
-          "src": ""
-        }
-      ],
+      "default": "#fff",
       "destination": "frontend",
       "params": {
-        "label": "Mapping for tag and image srcs",
-        "description": "The various tags/properties and src associations for extension. The badge hierarchy for items with multiple trigger tags is determined by array.",
-        "type": "json"
+        "label": "Text color of the badge",
+        "type": "text"
       }
     },
-    "badgeDisplayCount": {
+    "bgColor": {
       "type": "admin",
-      "default": 1,
+      "default": "#FF00AF",
       "destination": "frontend",
       "params": {
-        "label": "Total badges to display",
-        "description": "The count for the number of badges to display",
-        "type": "number"
-      }
-    },
-    "gridBadgeRatio": {
-      "type": "admin",
-      "default": {
-        "width": 50,
-        "height": 70.42
-      },
-      "destination": "frontend",
-      "params": {
-        "label": "Image ratio for badges within a grid view",
-        "description": "Set height and width to configure a ratio for badges with product images in a grid view",
-        "type": "json"
-      }
-    },
-    "cardBadgeRatio": {
-      "type": "admin",
-      "default": {
-        "width": 40,
-        "height": 56.33
-      },
-      "destination": "frontend",
-      "params": {
-        "label": "Image ratio for badges within a carde view",
-        "description": "Set height and width to configure a ratio for badges with product images in a card view",
-        "type": "json"
-      }
-    },
-    "pdpBadgeRatio": {
-      "type": "admin",
-      "default": {
-        "width": 60,
-        "height": 84.5
-      },
-      "destination": "frontend",
-      "params": {
-        "label": "Image ratio for badges within a PDP",
-        "description": "Set height and width to configure a ratio for badges with product images on a PDP",
-        "type": "json"
+        "label": "Background color of the badge",
+        "type": "text"
       }
     }
   }

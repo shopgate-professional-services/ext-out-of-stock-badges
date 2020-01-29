@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getBadgeInfo } from '../selectors';
+import { showBadge } from '../selectors';
 
 /**
  * @param {Object} state state
@@ -7,7 +7,7 @@ import { getBadgeInfo } from '../selectors';
  * @returns {Object}
  */
 const mapStateToProps = (state, props) => ({
-  badgeInfo: getBadgeInfo(state, props),
+  showBadge: showBadge(state, props),
 });
 
 export default connect(mapStateToProps);

@@ -1,8 +1,8 @@
 {
-  "name": "@shopgate-project/product-image-badges",
-  "version": "1.1.0",
-  "description": "Extension will allow a user to display a image badge on a product image based on tag or property.",
-  "license": "UNLICENSED",
+  "name": "@shopgate-project/out-of-stock-badges",
+  "version": "1.0.0",
+  "description": "Extension will allow a user to display a out of stock badge on a product image.",
+  "license": "Apache-2.0",
   "scripts": {
     "test": "jest",
     "test:watch": "npm run test -- --watch",
