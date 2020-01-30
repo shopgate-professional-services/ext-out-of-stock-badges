@@ -1,0 +1,38 @@
+{
+  "version": "1.0.0",
+  "id": "@shopgate-project/out-of-stock-badges",
+  "components": [
+    {
+      "id": "ComponentProductImage",
+      "type": "portals",
+      "path": "frontend/portals/ComponentProductImage",
+      "target": "component.product-image"
+    },
+    {
+      "id": "ProductItemImage",
+      "type": "portals",
+      "path": "frontend/portals/ProductItemImage",
+      "target": "product-item.image"
+    }
+  ],
+  "configuration": {
+    "textColor": {
+      "type": "admin",
+      "default": "#fff",
+      "destination": "frontend",
+      "params": {
+        "label": "Text color of the badge",
+        "type": "text"
+      }
+    },
+    "bgColor": {
+      "type": "admin",
+      "default": "#FF00AF",
+      "destination": "frontend",
+      "params": {
+        "label": "Background color of the badge",
+        "type": "text"
+      }
+    }
+  }
+}
