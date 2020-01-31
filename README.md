@@ -2,6 +2,9 @@
 
 Extension will show a out of stock badge on PDP and Product Lists
 
+## Demo & Examples
+[See here](demo/index.md)
+
 ## Configuration
 
 ### textColor
