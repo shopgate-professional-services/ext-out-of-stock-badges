@@ -1,6 +1,6 @@
 # Shopgate Connect - Extension Out of stock Badges
 
-Extension will show a out of stock badge on PDP and Product Lists
+Extension will show a out of stock badge on the PDP, in product lists, product sliders and the favorites list
 
 ## Demo & Examples
 [See here](demo/index.md)
@@ -12,6 +12,13 @@ Text color of the badge
 
 ### bgColor
 Background color of the badge
+
+### badgeText
+Text shown inside the badge. Defaults to `Sold out`.
+
+### hideBadge
+When enabled, no badge is shown on out-of-stock products — the product image is only grayed
+out. Defaults to `false`.
 
 ## About Shopgate
 

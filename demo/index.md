@@ -7,6 +7,8 @@
 ```json
 {
     "textColor": "#fff",
-    "bgColor": "#FF00AF"
+    "bgColor": "#FF00AF",
+    "badgeText": "Sold out",
+    "hideBadge": false
 }
 ```

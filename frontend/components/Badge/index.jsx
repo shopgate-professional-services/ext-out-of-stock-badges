@@ -1,57 +1,69 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { css } from 'glamor';
-import SoldOut from '../../icons/SoldOut';
+import { makeStyles } from '@shopgate/engage/styles';
+import config from '../../config.json';
 
-const styles = {
-  wrapper: css({
+const useStyles = makeStyles()({
+  wrapper: {
     position: 'relative',
-  }),
-  image: css({
+  },
+  image: {
     opacity: 0.5,
-  }),
-  badge: css({
-    width: '40%',
+  },
+  badge: {
+    maxWidth: '80%',
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
     zIndex: 99,
+    padding: '8px 16px',
+    borderRadius: 8,
     textAlign: 'center',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }),
-};
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    backgroundColor: config.bgColor,
+    color: config.textColor,
+  },
+});
 
 /**
- * @param {Object} badgeInfo badge images to display
+ * Wraps a product image and, when the product is out of stock, grays out the
+ * image. Unless hidden via configuration, it also overlays a badge with the
+ * configurable text.
+ * @param {Object} props The component props.
+ * @param {boolean} props.show Whether the product is out of stock.
+ * @param {JSX} props.children The product image.
  * @returns {JSX}
  */
-function ComponentProductImage({ show, children }) {
+function Badge({ show, children }) {
+  const { classes } = useStyles();
+
   if (!show) {
     return children;
   }
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.badge}>
-        <SoldOut />
-      </div>
-      <div className={styles.image}>
+    <div className={classes.wrapper}>
+      {!config.hideBadge && (
+        <div className={classes.badge}>
+          {config.badgeText || 'Sold out'}
+        </div>
+      )}
+      <div className={classes.image}>
         {children}
       </div>
     </div>
   );
 }
 
-ComponentProductImage.propTypes = {
+Badge.propTypes = {
   children: PropTypes.node.isRequired,
   show: PropTypes.bool,
 };
 
-ComponentProductImage.defaultProps = {
+Badge.defaultProps = {
   show: false,
 };
 
-export default ComponentProductImage;
+export default Badge;
