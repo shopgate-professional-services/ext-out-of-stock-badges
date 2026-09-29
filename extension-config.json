@@ -7,12 +7,6 @@
       "type": "portals",
       "path": "frontend/portals/ComponentProductImage",
       "target": "component.product-image"
-    },
-    {
-      "id": "ProductItemImage",
-      "type": "portals",
-      "path": "frontend/portals/ProductItemImage",
-      "target": "product-item.image"
     }
   ],
   "configuration": {

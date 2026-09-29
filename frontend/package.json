@@ -7,8 +7,8 @@
     "lint": "eslint --ignore-path ../.gitignore --ext .js --ext .jsx ."
   },
   "devDependencies": {
-    "@shopgate/engage": "^7.31.6-beta.1",
-    "@shopgate/eslint-config": "^7.31.6-beta.1",
+    "@shopgate/engage": "^7.31.9",
+    "@shopgate/eslint-config": "^7.31.9",
     "eslint": "^8.57.1",
     "prop-types": "~15.8.1",
     "react": "^17.0.2",

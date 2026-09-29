@@ -22,9 +22,9 @@ product lists, product sliders and the favorites list.
 ## Tech Stack
 
 - React 17 function components + hooks.
-- `@shopgate/engage` (theme-ios11 PWA platform, 7.31 line) — portals, hooks
-  (`useCurrentProduct`, `useProductListEntry`), selectors (`getProductStock`),
-  `makeStyles` (`@shopgate/engage/styles`).
+- `@shopgate/engage` (theme-ios11 PWA platform, 7.31 line) — portals, the
+  `useProductListEntry` hook, selectors (`getProductStock`), `makeStyles`
+  (`@shopgate/engage/styles`).
 - `react-redux` (`useSelector`) + `reselect` for the show/hide decision.
 - ESLint via `@shopgate/eslint-config`.
 - No TypeScript, no backend, no CI config in the repo.
@@ -45,21 +45,17 @@ before use; those commands act on the sandbox app).
 
 Map of the non-obvious wiring (not a folder listing):
 
-- `extension-config.json` — manifest. `components[]` registers the two portals;
-  `configuration` declares the admin settings (`textColor`, `bgColor`,
+- `extension-config.json` — manifest. `components[]` registers the single
+  portal; `configuration` declares the admin settings (`textColor`, `bgColor`,
   `badgeText`, `hideBadge`), all `destination: frontend`.
 - `frontend/portals/ComponentProductImage/` — registered to the portal
-  `component.product-image`. This is a **global** leaf portal: it renders wherever
-  the engage `ProductImage` renders (PDP, lists, sliders, favorites, …). It
-  resolves the product from `useCurrentProduct()` (PDP, incl. selected variant)
-  or `useProductListEntry()` (list-type surfaces).
-- `frontend/portals/ProductItemImage/` — registered to `product-item.image`
-  (grid/list item images, incl. the Products-widget list layout). Wraps its
-  children in the badge-handled context.
+  `component.product-image`, which wraps **every** engage `ProductImage` (PDP,
+  category/search grids, sliders, favorites, liveshopping, …). The product comes
+  from `useProductListEntry()`: every product surface wraps its items in a
+  `ProductListEntryProvider`, and on the PDP that entry is already the selected
+  variant (`variantId || productId`).
 - `frontend/components/Badge/` — presentational. Grays the image
   (`opacity: 0.5`) and overlays the badge with `config.badgeText`.
-  `context.js` is the "badge already handled" flag that stops the nested
-  `component.product-image` portal from drawing a second badge on grid cards.
 - `frontend/selectors/index.js` — `showBadge` (reselect) from `getProductStock`:
   out of stock = `ignoreQuantity === false && quantity <= 0`.
 - Config is read via `import config from '../../config.json'` (generated, git-ignored).
@@ -89,24 +85,28 @@ No automated tests are present. If you add tests, use the org setup
 
 ## Project-Specific Pitfalls
 
-- `component.product-image` is a **global** portal (every `ProductImage`), not
-  PDP-only; `product-item.image` is narrow and also fires on grid cards, so the
-  two nest there — the `BadgeHandledContext` guard prevents a double badge. Do
-  not remove it.
-- Because `component.product-image` is global, the list-entry fallback in
-  `ComponentProductImage` is gated on `listEntry.productListType`: real product
-  lists (grid/slider/favorites) set it, but the **cart** uses a
-  `ProductListEntryProvider` without a list type, so cart thumbnails get no badge.
-  Removing that gate would make out-of-stock badges appear in the cart.
-- `useCurrentProduct` only resolves on the PDP (the `ProductContext` provider
-  lives only in the theme's product page). Off the PDP use `useProductListEntry`.
+- Only `component.product-image` is used. Do not add `product-item.image` back:
+  it nests around `ProductImage` on grid cards and would draw a second badge.
+  Known gap: the Products widget in **list** layout (engage `ProductList` item)
+  renders a plain `Image` without that portal, so it shows no badge.
+- Because the portal is global, `ComponentProductImage` skips
+  `productListType === 'cart'` — the theme's cart page wraps its items in
+  `ProductListTypeProvider type="cart"`. Removing that check would make
+  out-of-stock badges appear on cart thumbnails.
+- Badge size scales with the image width (thumbnails are 80–120 px in favorites,
+  much wider on the PDP): font size uses container query units (`cqw`) with a
+  `@supports` fallback, and long words may wrap. `containerType` sits on the
+  absolutely positioned overlay on purpose — on the wrapper it would collapse
+  parents that size themselves by their content.
 - Parent/variant products: there is no aggregate variant stock, and parents
   usually carry `ignoreQuantity: true` → no badge on the parent. The PDP reflects
   the **selected variant's** stock.
 - Config must be a **default** import from `config.json` (the ESLint config
   forbids named JSON imports). Never commit the generated `frontend/config.json`.
-  A local `import/no-unresolved` before the first `sgconnect frontend start` is
-  expected — do **not** silence it with an `eslint-disable` comment.
+  `frontend/.eslintrc` tells `import/no-unresolved` to ignore `config.json`, so
+  lint is clean with and without the generated file. Do **not** use an
+  `eslint-disable` comment instead — once the file exists it fails as an unused
+  directive.
 - The extension `id` has **no** `ext-` prefix (only the repo is `ext-...`); keep
   `frontend/package.json` `name` identical to the manifest `id`.
 - `CHANGELOG.md` lists officially released versions only.

@@ -10,20 +10,36 @@ const useStyles = makeStyles()({
   image: {
     opacity: 0.5,
   },
-  badge: {
-    maxWidth: '80%',
+  overlay: {
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
     zIndex: 99,
-    padding: '8px 16px',
-    borderRadius: 8,
-    textAlign: 'center',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    pointerEvents: 'none',
+    containerType: 'inline-size',
+  },
+  badge: {
+    maxWidth: '90%',
+    boxSizing: 'border-box',
+    padding: '0.35em 0.7em',
+    borderRadius: '0.4em',
+    fontSize: 12,
+    lineHeight: 1.2,
     fontWeight: 'bold',
+    textAlign: 'center',
     textTransform: 'uppercase',
+    overflowWrap: 'anywhere',
+    wordBreak: 'break-word',
     backgroundColor: config.bgColor,
     color: config.textColor,
+    '@supports (container-type: inline-size)': {
+      fontSize: 'clamp(8px, 8cqw, 18px)',
+    },
   },
 });
 
@@ -46,8 +62,10 @@ function Badge({ show, children }) {
   return (
     <div className={classes.wrapper}>
       {!config.hideBadge && (
-        <div className={classes.badge}>
-          {config.badgeText || 'Sold out'}
+        <div className={classes.overlay}>
+          <div className={classes.badge}>
+            {config.badgeText || 'Sold out'}
+          </div>
         </div>
       )}
       <div className={classes.image}>
