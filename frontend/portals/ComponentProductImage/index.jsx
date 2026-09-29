@@ -1,17 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withCurrentProduct } from '@shopgate/engage/core';
+import { useSelector } from 'react-redux';
+import { useProductListEntry } from '@shopgate/engage/product';
 import Badge from '../../components/Badge';
-import connect from '../connector';
+import { showBadge } from '../../selectors';
 
 /**
- * @param {Object} showBadge badge images to display
- * @param {Function} children children
+ * Wraps every product image via the global `component.product-image` portal. The product is
+ * taken from the surrounding product list entry, which every product surface provides — on the
+ * PDP it already is the selected variant. Cart thumbnails never get a badge.
+ * @param {Object} props The component props.
+ * @param {JSX} props.children The product image.
  * @returns {JSX}
  */
-function ComponentProductImage({ showBadge, children }) {
+function ComponentProductImage({ children }) {
+  const { productId, productListType } = useProductListEntry();
+  const show = useSelector(state => (
+    productListType !== 'cart' && showBadge(state, { productId })
+  ));
+
   return (
-    <Badge show={showBadge}>
+    <Badge show={show}>
       {children}
     </Badge>
   );
@@ -19,7 +28,6 @@ function ComponentProductImage({ showBadge, children }) {
 
 ComponentProductImage.propTypes = {
   children: PropTypes.node.isRequired,
-  showBadge: PropTypes.bool.isRequired,
 };
 
-export default withCurrentProduct(connect(ComponentProductImage));
+export default ComponentProductImage;

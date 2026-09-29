@@ -1,57 +1,87 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { css } from 'glamor';
-import SoldOut from '../../icons/SoldOut';
+import { makeStyles } from '@shopgate/engage/styles';
+import config from '../../config.json';
 
-const styles = {
-  wrapper: css({
+const useStyles = makeStyles()({
+  wrapper: {
     position: 'relative',
-  }),
-  image: css({
+  },
+  image: {
     opacity: 0.5,
-  }),
-  badge: css({
-    width: '40%',
+  },
+  overlay: {
     position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
     zIndex: 99,
-    textAlign: 'center',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  }),
-};
+    pointerEvents: 'none',
+    containerType: 'inline-size',
+  },
+  badge: {
+    maxWidth: '90%',
+    boxSizing: 'border-box',
+    padding: '0.35em 0.7em',
+    borderRadius: '0.4em',
+    fontSize: 12,
+    lineHeight: 1.2,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textTransform: 'uppercase',
+    overflowWrap: 'anywhere',
+    wordBreak: 'break-word',
+    backgroundColor: config.bgColor,
+    color: config.textColor,
+    '@supports (container-type: inline-size)': {
+      fontSize: 'clamp(8px, 8cqw, 18px)',
+    },
+  },
+});
 
 /**
- * @param {Object} badgeInfo badge images to display
+ * Wraps a product image and, when the product is out of stock, grays out the
+ * image. Unless hidden via configuration, it also overlays a badge with the
+ * configurable text.
+ * @param {Object} props The component props.
+ * @param {boolean} props.show Whether the product is out of stock.
+ * @param {JSX} props.children The product image.
  * @returns {JSX}
  */
-function ComponentProductImage({ show, children }) {
+function Badge({ show, children }) {
+  const { classes } = useStyles();
+
   if (!show) {
     return children;
   }
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.badge}>
-        <SoldOut />
-      </div>
-      <div className={styles.image}>
+    <div className={classes.wrapper}>
+      {!config.hideBadge && (
+        <div className={classes.overlay}>
+          <div className={classes.badge}>
+            {config.badgeText || 'Sold out'}
+          </div>
+        </div>
+      )}
+      <div className={classes.image}>
         {children}
       </div>
     </div>
   );
 }
 
-ComponentProductImage.propTypes = {
+Badge.propTypes = {
   children: PropTypes.node.isRequired,
   show: PropTypes.bool,
 };
 
-ComponentProductImage.defaultProps = {
+Badge.defaultProps = {
   show: false,
 };
 
-export default ComponentProductImage;
+export default Badge;
